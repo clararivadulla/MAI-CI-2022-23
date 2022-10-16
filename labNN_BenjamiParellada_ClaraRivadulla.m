@@ -11,9 +11,9 @@ net = feedforwardnet(50);
 % net = feedforwardnet(500);
 
 net.divideFcn = 'dividerand';
-net.divideParam.trainRatio = 0.1; % Ratio of data used as training set
+net.divideParam.trainRatio = 0.8; % Ratio of data used as training set
 net.divideParam.valRatio = 0.1; % Ratio of data used as validation set
-net.divideParam.testRatio = 0.8; % Ratio of data used as test set
+net.divideParam.testRatio = 0.1; % Ratio of data used as test set
 
 net.trainParam.max_fail = 7; % validation check parameter
 net.trainParam.epochs=4000; % number of epochs parameter
