@@ -1,4 +1,5 @@
 load('results.mat');
+writetable(T,'results.xlsx',"WriteMode","append","AutoFitWidth",false);
 
 accuracies1 = T.Accuracy(T.TransOut == "logsig" & T.TrainRatio == 0.80);
 sizes1 = T.Size(T.TransOut == "logsig" & T.TrainRatio == 0.80);
