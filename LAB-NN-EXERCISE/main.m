@@ -7,61 +7,58 @@ n_classes = 101;
 % One-hot encoding scheme
 Y_one_hot = full(ind2vec(Y, n_classes));
 
+% data splittings to test
+splitting = [0.80 0.10 0.10; 0.40 0.20 0.40; 0.10 0.10 0.80];
+out_and_cost = ["logsig" "softmax"; "mse" "crossentropy"];
+
+% table to save configurations and accuracies achieved
+Size = [];
+TransOut = [];
+PerformFct = [];
+TrainRatio = [];
+ValRatio = [];
+TestRatio = [];
+Accuracy = [];
+
 % set parameters for nnet
-params.size = 50;
-params.trainRatio = 0.8; 
-params.valRatio = 0.1; 
-params.testRatio = 0.1; 
 params.max_fail = 6; 
 params.epochs = 2000; 
 params.min_grad = 1e-5;
 params.transHidden = 'logsig'; 
-params.transOut = 'logsig'; 
-params.performFcn = 'mse';
 params.trainFcn = 'trainrp';
 params.mc = 0.8; 
 params.lr = 0.01;
 
-% test different functions
-params.transHidden = 'logsig'; 
-params.transOut = 'logsig'; 
-params.performFcn = 'mse';
-t1 = evaluator(X, Y_one_hot, params, 3)
+% test with different number of hidden layers
+for i = 50:50:500
 
-params.transHidden = 'logsig'; 
-params.transOut = 'softmax'; 
-params.performFcn = 'crossentropy';
-t2 = evaluator(X, Y_one_hot, params, 3)
+    params.size = i;
+    
 
-% compare t1 vs t2, set the values of these 
+    for j = 1:size(splitting, 1)
 
-% test different hidden layers
-params.size = 50;
-t3 = evaluator(X, Y_one_hot, params, 3)
+        params.trainRatio = splitting(j, 1); 
+        params.valRatio = splitting(j, 2); 
+        params.testRatio = splitting(j, 3); 
 
-params.size = 200;
-t4 = evaluator(X, Y_one_hot, params, 3)
+        for z = 1:size(out_and_cost, 1)
 
-params.size = 500;
-t5 = evaluator(X, Y_one_hot, params, 3)
+            params.transOut = out_and_cost(1, z); 
+            params.performFcn = out_and_cost(2, z);
+            acc = evaluator(X, Y_one_hot, params, 3);
 
-% compare t3 vs t4 vs t5, set the values of these 
-
-% test different train validation test ratios
-params.trainRatio = 0.80; 
-params.valRatio = 0.10; 
-params.testRatio = 0.10; 
-t6 = evaluator(X, Y_one_hot, params, 3)
-
-params.trainRatio = 0.40; 
-params.valRatio = 0.20; 
-params.testRatio = 0.40; 
-t7 = evaluator(X, Y_one_hot, params, 3)
-
-params.trainRatio = 0.10; 
-params.valRatio = 0.10; 
-params.testRatio = 0.80; 
-t8 = evaluator(X, Y_one_hot, params, 3)
+            Size = [Size; params.size];
+            TransOut = [TransOut; params.transOut];
+            PerformFct = [PerformFct; params.performFcn];
+            TrainRatio = [TrainRatio; params.trainRatio];
+            ValRatio = [ValRatio; params.valRatio];
+            TestRatio = [TestRatio; params.testRatio];
+            Accuracy = [Accuracy; acc];
+            
+        end
+    end
+end
+T = table(Size, TransOut, PerformFct, TrainRatio, ValRatio, TestRatio, Accuracy);
 
 % function to calculate the mean of different runs
 function accuracy = evaluator(X, Y, params, n_runs)
