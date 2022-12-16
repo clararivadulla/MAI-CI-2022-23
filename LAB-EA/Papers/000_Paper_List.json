@@ -1,0 +1,200 @@
+{
+    "1004.3557": {
+        "paper_id": "1004.3557",
+        "abs_url": "https://arxiv.org/abs/1004.3557",
+        "pdf_url": "https://arxiv.org/pdf/1004.3557.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "1004.3557_Neuroevolutionary_optimization.pdf",
+        "title": "Neuroevolutionary optimization",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "Eva Volna"
+        ],
+        "abstract": "This paper presents an application of evolutionary search procedures to artificial neural networks. Here, we can distinguish among three kinds of evolution in artificial neural networks, i.e. the evolution of connection weights, of architectures, and of learning rules. We review each kind of evolution in detail and analyse critical issues related to different evolutions. This article concentrates on finding the suitable way of using evolutionary algorithms for optimizing the artificial neural network parameters.",
+        "comments": "International Journal of Computer Science Issues online at this http URL",
+        "official_code_urls": [],
+        "pwc_page_url": "",
+        "bibtex": "@misc{volna2010neuroevolutionary,\n      title={Neuroevolutionary optimization}, \n      author={Eva Volna},\n      year={2010},\n      eprint={1004.3557},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE}\n}"
+    },
+    "1712.06567": {
+        "paper_id": "1712.06567",
+        "abs_url": "https://arxiv.org/abs/1712.06567",
+        "pdf_url": "https://arxiv.org/pdf/1712.06567.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "1712.06567_Deep_Neuroevolution_Genetic_Algorithms_Are_a_Competitive_Alternative_for_Training_Deep_Neural_Networks_for_Reinforcement_Learning.pdf",
+        "title": "Deep Neuroevolution: Genetic Algorithms Are a Competitive Alternative for Training Deep Neural Networks for Reinforcement Learning",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "Felipe Petroski Such",
+            "Vashisht Madhavan",
+            "Edoardo Conti",
+            "Joel Lehman",
+            "Kenneth O. Stanley",
+            "Jeff Clune"
+        ],
+        "abstract": "Deep artificial neural networks (DNNs) are typically trained via gradient-based learning algorithms, namely backpropagation. Evolution strategies (ES) can rival backprop-based algorithms such as Q-learning and policy gradients on challenging deep reinforcement learning (RL) problems. However, ES can be considered a gradient-based algorithm because it performs stochastic gradient descent via an operation similar to a finite-difference approximation of the gradient. That raises the question of whether non-gradient-based evolutionary algorithms can work at DNN scales. Here we demonstrate they can: we evolve the weights of a DNN with a simple, gradient-free, population-based genetic algorithm (GA) and it performs well on hard deep RL problems, including Atari and humanoid locomotion. The Deep GA successfully evolves networks with over four million free parameters, the largest neural networks ever evolved with a traditional evolutionary algorithm. These results (1) expand our sense of the scale at which GAs can operate, (2) suggest intriguingly that in some cases following the gradient is not the best choice for optimizing performance, and (3) make immediately available the multitude of neuroevolution techniques that improve performance. We demonstrate the latter by showing that combining DNNs with novelty search, which encourages exploration on tasks with deceptive or sparse reward functions, can solve a high-dimensional problem on which reward-maximizing algorithms (e.g.\\ DQN, A3C, ES, and the GA) fail. Additionally, the Deep GA is faster than ES, A3C, and DQN (it can train Atari in ${\\raise.17ex\\hbox{$\\scriptstyle\\sim$}}$4 hours on one desktop or ${\\raise.17ex\\hbox{$\\scriptstyle\\sim$}}$1 hour distributed on 720 cores), and enables a state-of-the-art, up to 10,000-fold compact encoding technique.",
+        "comments": "",
+        "official_code_urls": [],
+        "pwc_page_url": "https://paperswithcode.com/paper/deep-neuroevolution-genetic-algorithms-are-a",
+        "bibtex": "@misc{such2018deep,\n      title={Deep Neuroevolution: Genetic Algorithms Are a Competitive Alternative for Training Deep Neural Networks for Reinforcement Learning}, \n      author={Felipe Petroski Such and Vashisht Madhavan and Edoardo Conti and Joel Lehman and Kenneth O. Stanley and Jeff Clune},\n      year={2018},\n      eprint={1712.06567},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE}\n}"
+    },
+    "1909.11655": {
+        "paper_id": "1909.11655",
+        "abs_url": "https://arxiv.org/abs/1909.11655",
+        "pdf_url": "https://arxiv.org/pdf/1909.11655.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "1909.11655_Augmenting_Genetic_Algorithms_with_Deep_Neural_Networks_for_Exploring_the_Chemical_Space.pdf",
+        "title": "Augmenting Genetic Algorithms with Deep Neural Networks for Exploring the Chemical Space",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "AkshatKumar Nigam",
+            "Pascal Friederich",
+            "Mario Krenn",
+            "Al\u00e1n Aspuru-Guzik"
+        ],
+        "abstract": "Challenges in natural sciences can often be phrased as optimization problems. Machine learning techniques have recently been applied to solve such problems. One example in chemistry is the design of tailor-made organic materials and molecules, which requires efficient methods to explore the chemical space. We present a genetic algorithm (GA) that is enhanced with a neural network (DNN) based discriminator model to improve the diversity of generated molecules and at the same time steer the GA. We show that our algorithm outperforms other generative models in optimization tasks. We furthermore present a way to increase interpretability of genetic algorithms, which helped us to derive design principles.",
+        "comments": "9+3 Pages, 7+4 figures, 2 tables. Comments are welcome! (code is available at: this https URL )",
+        "official_code_urls": [
+            "https://github.com/aspuru-guzik-group/GA"
+        ],
+        "pwc_page_url": "https://paperswithcode.com/paper/augmenting-genetic-algorithms-with-deep",
+        "bibtex": "@misc{nigam2020augmenting,\n      title={Augmenting Genetic Algorithms with Deep Neural Networks for Exploring the Chemical Space}, \n      author={AkshatKumar Nigam and Pascal Friederich and Mario Krenn and Al\u00e1n Aspuru-Guzik},\n      year={2020},\n      eprint={1909.11655},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE}\n}"
+    },
+    "1909.13354": {
+        "paper_id": "1909.13354",
+        "abs_url": "https://arxiv.org/abs/1909.13354",
+        "pdf_url": "https://arxiv.org/pdf/1909.13354.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "1909.13354_GACNN_Training_Deep_Convolutional_Neural_Networks_with_Genetic_Algorithm.pdf",
+        "title": "GACNN: Training Deep Convolutional Neural Networks with Genetic Algorithm",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "Parsa Esfahanian",
+            "Mohammad Akhavan"
+        ],
+        "abstract": "Convolutional Neural Networks (CNNs) have gained a significant attraction in the recent years due to their increasing real-world applications. Their performance is highly dependent to the network structure and the selected optimization method for tuning the network parameters. In this paper, we propose novel yet efficient methods for training convolutional neural networks. The most of current state of the art learning method for CNNs are based on Gradient decent. In contrary to the traditional CNN training methods, we propose to optimize the CNNs using methods based on Genetic Algorithms (GAs). These methods are carried out using three individual GA schemes, Steady-State, Generational, and Elitism. We present new genetic operators for crossover, mutation and also an innovative encoding paradigm of CNNs to chromosomes aiming to reduce the resulting chromosome's size by a large factor. We compare the effectiveness and scalability of our encoding with the traditional encoding. Furthermore, the performance of individual GA schemes used for training the networks were compared with each other in means of convergence rate and overall accuracy. Finally, our new encoding alongside the superior GA-based training scheme is compared to Backpropagation training with Adam optimization.",
+        "comments": "",
+        "official_code_urls": [
+            "https://github.com/Mohammadakhavan75/GANN"
+        ],
+        "pwc_page_url": "https://paperswithcode.com/paper/gacnn-training-deep-convolutional-neural",
+        "bibtex": "@misc{esfahanian2019gacnn,\n      title={GACNN: Training Deep Convolutional Neural Networks with Genetic Algorithm}, \n      author={Parsa Esfahanian and Mohammad Akhavan},\n      year={2019},\n      eprint={1909.13354},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE}\n}"
+    },
+    "2006.12703": {
+        "paper_id": "2006.12703",
+        "abs_url": "https://arxiv.org/abs/2006.12703",
+        "pdf_url": "https://arxiv.org/pdf/2006.12703.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "2006.12703_Efficient_Hyperparameter_Optimization_in_Deep_Learning_Using_a_Variable_Length_Genetic_Algorithm.pdf",
+        "title": "Efficient Hyperparameter Optimization in Deep Learning Using a Variable Length Genetic Algorithm",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "Xueli Xiao",
+            "Ming Yan",
+            "Sunitha Basodi",
+            "Chunyan Ji",
+            "Yi Pan"
+        ],
+        "abstract": "Convolutional Neural Networks (CNN) have gained great success in many artificial intelligence tasks. However, finding a good set of hyperparameters for a CNN remains a challenging task. It usually takes an expert with deep knowledge, and trials and errors. Genetic algorithms have been used in hyperparameter optimizations. However, traditional genetic algorithms with fixed-length chromosomes may not be a good fit for optimizing deep learning hyperparameters, because deep learning models have variable number of hyperparameters depending on the model depth. As the depth increases, the number of hyperparameters grows exponentially, and searching becomes exponentially harder. It is important to have an efficient algorithm that can find a good model in reasonable time. In this article, we propose to use a variable length genetic algorithm (GA) to systematically and automatically tune the hyperparameters of a CNN to improve its performance. Experimental results show that our algorithm can find good CNN hyperparameters efficiently. It is clear from our experiments that if more time is spent on optimizing the hyperparameters, better results could be achieved. Theoretically, if we had unlimited time and CPU power, we could find the optimized hyperparameters and achieve the best results in the future.",
+        "comments": "",
+        "official_code_urls": [],
+        "pwc_page_url": "https://paperswithcode.com/paper/efficient-hyperparameter-optimization-in-deep",
+        "bibtex": "@misc{xiao2020efficient,\n      title={Efficient Hyperparameter Optimization in Deep Learning Using a Variable Length Genetic Algorithm}, \n      author={Xueli Xiao and Ming Yan and Sunitha Basodi and Chunyan Ji and Yi Pan},\n      year={2020},\n      eprint={2006.12703},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE}\n}"
+    },
+    "2009.08928": {
+        "paper_id": "2009.08928",
+        "abs_url": "https://arxiv.org/abs/2009.08928",
+        "pdf_url": "https://arxiv.org/pdf/2009.08928.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "2009.08928_A_Study_of_Genetic_Algorithms_for_Hyperparameter_Optimization_of_Neural_Networks_in_Machine_Translation.pdf",
+        "title": "A Study of Genetic Algorithms for Hyperparameter Optimization of Neural Networks in Machine Translation",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "Keshav Ganapathy"
+        ],
+        "abstract": "With neural networks having demonstrated their versatility and benefits, the need for their optimal performance is as prevalent as ever. A defining characteristic, hyperparameters, can greatly affect its performance. Thus engineers go through a process, tuning, to identify and implement optimal hyperparameters. That being said, excess amounts of manual effort are required for tuning network architectures, training configurations, and preprocessing settings such as Byte Pair Encoding (BPE). In this study, we propose an automatic tuning method modeled after Darwin's Survival of the Fittest Theory via a Genetic Algorithm (GA). Research results show that the proposed method, a GA, outperforms a random selection of hyperparameters.",
+        "comments": "",
+        "official_code_urls": [],
+        "pwc_page_url": "https://paperswithcode.com/paper/a-study-of-genetic-algorithms-for",
+        "bibtex": "@misc{ganapathy2020study,\n      title={A Study of Genetic Algorithms for Hyperparameter Optimization of Neural Networks in Machine Translation}, \n      author={Keshav Ganapathy},\n      year={2020},\n      eprint={2009.08928},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE}\n}"
+    },
+    "2010.04340": {
+        "paper_id": "2010.04340",
+        "abs_url": "https://arxiv.org/abs/2010.04340",
+        "pdf_url": "https://arxiv.org/pdf/2010.04340.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "2010.04340_Genetic-algorithm-optimized_neural_networks_for_gravitational_wave_classification.pdf",
+        "title": "Genetic-algorithm-optimized neural networks for gravitational wave classification",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "Dwyer S. Deighan",
+            "Scott E. Field",
+            "Collin D. Capano",
+            "Gaurav Khanna"
+        ],
+        "abstract": "Gravitational-wave detection strategies are based on a signal analysis technique known as matched filtering. Despite the success of matched filtering, due to its computational cost, there has been recent interest in developing deep convolutional neural networks (CNNs) for signal detection. Designing these networks remains a challenge as most procedures adopt a trial and error strategy to set the hyperparameter values. We propose a new method for hyperparameter optimization based on genetic algorithms (GAs). We compare six different GA variants and explore different choices for the GA-optimized fitness score. We show that the GA can discover high-quality architectures when the initial hyperparameter seed values are far from a good solution as well as refining already good networks. For example, when starting from the architecture proposed by George and Huerta, the network optimized over the 20-dimensional hyperparameter space has 78% fewer trainable parameters while obtaining an 11% increase in accuracy for our test problem. Using genetic algorithm optimization to refine an existing network should be especially useful if the problem context (e.g. statistical properties of the noise, signal model, etc) changes and one needs to rebuild a network. In all of our experiments, we find the GA discovers significantly less complicated networks as compared to the seed network, suggesting it can be used to prune wasteful network structures. While we have restricted our attention to CNN classifiers, our GA hyperparameter optimization strategy can be applied within other machine learning settings.",
+        "comments": "25 pages, 8 figures, and 2 tables; Version 2 includes an expanded discussion of our hyperparameter optimization model",
+        "official_code_urls": [],
+        "pwc_page_url": "https://paperswithcode.com/paper/genetic-algorithm-optimized-neural-networks",
+        "bibtex": "@misc{deighan2021geneticalgorithmoptimized,\n      title={Genetic-algorithm-optimized neural networks for gravitational wave classification}, \n      author={Dwyer S. Deighan and Scott E. Field and Collin D. Capano and Gaurav Khanna},\n      year={2021},\n      eprint={2010.04340},\n      archivePrefix={arXiv},\n      primaryClass={gr-qc}\n}"
+    },
+    "2208.10658": {
+        "paper_id": "2208.10658",
+        "abs_url": "https://arxiv.org/abs/2208.10658",
+        "pdf_url": "https://arxiv.org/pdf/2208.10658.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "2208.10658_Survey_on_Evolutionary_Deep_Learning_Principles_Algorithms_Applications_and_Open_Issues.pdf",
+        "title": "Survey on Evolutionary Deep Learning: Principles, Algorithms, Applications and Open Issues",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "Nan Li",
+            "Lianbo Ma",
+            "Guo Yu",
+            "Bing Xue",
+            "Mengjie Zhang",
+            "Yaochu Jin"
+        ],
+        "abstract": "Over recent years, there has been a rapid development of deep learning (DL) in both industry and academia fields. However, finding the optimal hyperparameters of a DL model often needs high computational cost and human expertise. To mitigate the above issue, evolutionary computation (EC) as a powerful heuristic search approach has shown significant merits in the automated design of DL models, so-called evolutionary deep learning (EDL). This paper aims to analyze EDL from the perspective of automated machine learning (AutoML). Specifically, we firstly illuminate EDL from machine learning and EC and regard EDL as an optimization problem. According to the DL pipeline, we systematically introduce EDL methods ranging from feature engineering, model generation, to model deployment with a new taxonomy (i.e., what and how to evolve/optimize), and focus on the discussions of solution representation and search paradigm in handling the optimization problem by EC. Finally, key applications, open issues and potentially promising lines of future research are suggested. This survey has reviewed recent developments of EDL and offers insightful guidelines for the development of EDL.",
+        "comments": "34 pages,6 figures",
+        "official_code_urls": [],
+        "pwc_page_url": "https://paperswithcode.com/paper/survey-on-evolutionary-deep-learning",
+        "bibtex": "@misc{li2022survey,\n      title={Survey on Evolutionary Deep Learning: Principles, Algorithms, Applications and Open Issues}, \n      author={Nan Li and Lianbo Ma and Guo Yu and Bing Xue and Mengjie Zhang and Yaochu Jin},\n      year={2022},\n      eprint={2208.10658},\n      archivePrefix={arXiv},\n      primaryClass={cs.NE}\n}"
+    },
+    "2209.02685": {
+        "paper_id": "2209.02685",
+        "abs_url": "https://arxiv.org/abs/2209.02685",
+        "pdf_url": "https://arxiv.org/pdf/2209.02685.pdf",
+        "supp_url": null,
+        "src_website": "ArXiv",
+        "download_name": "2209.02685_Neural_Networks_Optimized_by_Genetic_Algorithms_in_Cosmology.pdf",
+        "title": "Neural Networks Optimized by Genetic Algorithms in Cosmology",
+        "year": null,
+        "paper_venue": null,
+        "authors": [
+            "Isidro G\u00f3mez-Vargas",
+            "Joshua Briones Andrade",
+            "J. Alberto V\u00e1zquez"
+        ],
+        "abstract": "The applications of artificial neural networks in the cosmological field have shone successfully during the past decade, this is due to their great ability of modeling large amounts of datasets and complex nonlinear functions. However, in some cases, their use still remains controversial becasue their ease of producing inaccurate results when the hyperparameters are not carefully selected. In this paper, to find the optimal combination of hyperparameters that describe the artificial neural networks, we propose to take advantage of the genetic algorithms. As a proof of the concept, we analyze three different cosmological cases to test the performance of the new architecture achieved with the genetic algorithms and compare the output with the standard process, consisting of a grid with all possible configurations. First, we carry out a model-independent reconstruction of the distance modulus using a Type Ia Supernovae compilation. Second, the neural networks learn to solve dynamical system of the Universe's content, and finally with the latest Sloan Digital Sky Survey data release we train the networks for the classification of astronomical objects. We found that the genetic algorithms improve considerably the generation of the architecture, which can ensure more confidence in their physical results because of the better performance in the metrics with respect to the grid method.",
+        "comments": "13 pages, 4 figures",
+        "official_code_urls": [],
+        "pwc_page_url": "https://paperswithcode.com/paper/neural-networks-optimized-by-genetic",
+        "bibtex": "@misc{g\u00f3mezvargas2022neural,\n      title={Neural Networks Optimized by Genetic Algorithms in Cosmology}, \n      author={Isidro G\u00f3mez-Vargas and Joshua Briones Andrade and J. Alberto V\u00e1zquez},\n      year={2022},\n      eprint={2209.02685},\n      archivePrefix={arXiv},\n      primaryClass={astro-ph.IM}\n}"
+    }
+}
