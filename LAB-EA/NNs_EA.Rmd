@@ -1,0 +1,175 @@
+---
+title: "Training Neural Networks with Evolutionary Algorithms"
+author: "Benjamí Parellada and Clara Rivadulla"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  rmarkdown::html_document:
+    toc: true
+    number_sections: false
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = "center", 
+               out.width = "80%",
+               fig.width = 6, fig.height = 5,
+               dev = "svg", fig.ext = "svg",
+               par = TRUE, # needed for setting hook 
+               collapse = TRUE, # collapse input & output code in chunks
+               warning = FALSE)
+
+knit_hooks$set(par = function(before, options, envir)
+  { if(before && options$fig.show != "none") 
+       par(family = "sans", mar=c(4.1,4.1,1.1,1.1), mgp=c(3,1,0), tcl=-0.5)
+})
+```
+
+## Introduction
+
+## Dataset
+
+As specified in the description of the exercise, we're going to use **synthetic data**. This will allow us to determine the sample size used for training, validation and testing, the true generalization error of a model, the amount of noise and the problem hardness.
+
+We've decided to create a data set related to the performance of students in the Bachelor Degree in Informatics Engineering of the UPC. Specifically, we want to predict the grade that they will obtain in the subject of Programming Projects according to their previous results in two related subjects: Programming 1 and Programming 2.
+
+| Variable | Variable name | Description |
+|-------|-------------|-------------|
+| Student ID | id | Unique identifier of a student. 
+| Programming 1 Grade* | prog1_grade | The grade that the student got in the Programming 1 subject. The average grade for all students is 6.4 out of 10.
+| Programming 2 Grade* | prog2_grade | The grade that the student got in the Programming 2 subject. The average grade for all students is 6.7 out of 10.
+| Class Absences | absences | The number of absences of a student (number of days they've not attended to class) during their first year. Students tend to have an average of 5 absences.
+| Programming Projects Grade* | prog_proj_grade | The mean grade of a student from Semester 1 to Semester 4. The average mean grade is 7.3 out of 10. 
+\* Variables that are correlated with one another
+
+Function to round numeric values of a dataframe:
+```{r}
+round_df <- function(df, digits, max_value) {
+  nums <- vapply(df, is.numeric, FUN.VALUE = logical(1))
+
+  df[,nums] <- round(df[,nums], digits = digits)
+  df[,nums][df[,nums] > max_value] <- max_value
+  df[,nums][df[,nums] < 0] <- 0
+
+  (df)
+}
+```
+
+Function to generate a dataframe of N data instances and split it into train, validation and test sets according to the fractions given (`fractionTraining`, `fractionValidation`, and `fractionTest`):
+
+```{r}
+library(MASS)
+generate_data <- function(N, fractionTraining, fractionValidation, fractionTest) {
+  
+  id <- paste0("S#", 1:N)
+  set.seed(0717)
+  absences <- rpois(N, lambda = 5)
+  
+  cor_var_means <- c(6.4, 6.7, 7.3)
+  cor_var_matrix <- matrix(
+    c(
+      0.87, 0.65, 0.6,
+      0.65, 1.2, 0.7,
+      0.6, 0.7, 0.68
+    ), byrow = T, nrow = 3
+  )
+  set.seed(0717)
+  correlated_vars_df <- as.data.frame(mvrnorm(n = N, mu = cor_var_means, Sigma = cor_var_matrix))
+  
+  correlated_vars_df_cols <- c("prog1_grade", "prog2_grade", "prog_proj_grade")
+  colnames(correlated_vars_df) <- correlated_vars_df_cols
+  
+  correlated_vars_df <- round_df(correlated_vars_df, digits = 1, max_value = 10)
+  
+  df <- cbind(absences, correlated_vars_df)
+  
+  sampleSizeTraining   <- floor(fractionTraining   * nrow(df))
+  sampleSizeValidation <- floor(fractionValidation * nrow(df))
+  sampleSizeTest       <- floor(fractionTest       * nrow(df))
+
+  indicesTraining    <- sort(sample(seq_len(nrow(df)), size=sampleSizeTraining))
+  indicesNotTraining <- setdiff(seq_len(nrow(df)), indicesTraining)
+  indicesValidation  <- sort(sample(indicesNotTraining, size=sampleSizeValidation))
+  indicesTest        <- setdiff(indicesNotTraining, indicesValidation)
+
+
+  dfTraining   <- df[indicesTraining, ]
+  dfValidation <- df[indicesValidation, ]
+  dfTest       <- df[indicesTest, ]
+  
+  return(list(dfTraining, dfValidation, dfTest))
+  
+}
+```
+
+We generate 3 different data frames: one as the `train` set, one as the `validation` set and one as the `test` set. 
+
+```{r}
+data <- generate_data(3000, 0.8, 0.1, 0.1)
+train <- data[[1]]
+val <- data[[2]]
+test <- data[[3]]
+```
+
+
+## Model
+
+In order to define our **MLP** (*Multi Layer Perceptron*) model, we'll use the `nnet` package, which is intended for fitting feed-forward neural networks with a single hidden layer. 
+
+```{r}
+library(nnet)
+model <- nnet(prog_proj_grade/10 ~ ., data=train, size=5, decay=1.0e-5, maxit=2000)
+model
+summary(model)
+```
+```{r}
+test_pred <- predict(model, test)*10
+test_results <- data.frame(test_actual = test$prog2_grade, test_prediction = test_pred)
+rmse <- sqrt(mean((test$prog2_grade-test_pred)^2))
+rmse
+```
+
+Let's use GA:
+```{r}
+fit_rf=function(x)
+{
+  s=binary2decimal(x[1:1])
+  if(s==0)
+  {
+    s=1
+  }
+  if(s>32)
+  {
+    s=32
+  }
+  model=nnet(prog_proj_grade/10 ~ ., data=train, size=s)
+  predictions=predict(model, test)
+  rmse <- sqrt(mean((test$prog2_grade-predictions*10)^2))
+  return(-rmse) #since GA maximize the objective function and we want to minimize RMSE
+}
+```
+
+```{r}
+library(GA)
+library(tictoc)
+tic()
+GA3=ga(type='binary',fitness=fit_rf,nBits=14,
+       maxiter=30,popSize=50,seed=1234,keepBest=TRUE)
+summary(GA3)
+plot(GA3)
+toc()
+```
+```{r}
+ga_rf_fit=as.data.frame(GA3@bestSol)
+ga_size=apply(ga_rf_fit[, 1:5],1,binary2decimal)
+ga_size
+```
+
+## Conclusions
+
+
+
+## References
+- https://towardsdatascience.com/how-to-create-a-custom-dataset-in-r-cf045e286656
+- https://towardsdatascience.com/genetic-algorithm-in-r-hyperparameter-tuning-5fc6439d2962
+
+
