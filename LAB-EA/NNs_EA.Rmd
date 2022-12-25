@@ -32,6 +32,9 @@ As specified in the description of the exercise, we're going to use **synthetic 
 
 We've decided to create a data set related to the performance of students in the Bachelor Degree in Informatics Engineering of the UPC. Specifically, we want to predict the grade that they will obtain in the subject of Programming Projects according to their previous results in two related subjects: Programming 1 and Programming 2.
 
+First, we list down all variables we want to include in the data set, and describe the requirements of each one:
+
+
 | Variable | Variable name | Description |
 |-------|-------------|-------------|
 | Student ID | id | Unique identifier of a student. 
@@ -41,20 +44,25 @@ We've decided to create a data set related to the performance of students in the
 | Programming Projects Grade* | prog_proj_grade | The mean grade of a student from Semester 1 to Semester 4. The average mean grade is 7.3 out of 10. 
 \* Variables that are correlated with one another
 
-Function to round numeric values of a dataframe:
+Now, we're going to define the functions that are useful for generating our synthetic data set: `generate_data`, to generate a dataframe of N data instances and split it into train, validation and test sets according to the fractions given (`fractionTraining`, `fractionValidation`, and `fractionTest`); and `round_df`, to round the data by defining a `max_value` and a `min_value`. 
+
+In the generating process, we take into account that:
+* To generate unique `IDs` is to create a sequence of whole numbers.
+* The number of `absences` is distributed according to a Poisson distribution.
+* The 3 grades (`prog1_grade`, `prog2_grade', `prog_proj_grade`) are correlated, and so we need a vector of means and a variance-covariance matrix to generate our multivariate normal distribution and calculate the covariances. 
+
+
 ```{r}
-round_df <- function(df, digits, max_value) {
+round_df <- function(df, digits, max_value, min_value) {
   nums <- vapply(df, is.numeric, FUN.VALUE = logical(1))
 
   df[,nums] <- round(df[,nums], digits = digits)
   df[,nums][df[,nums] > max_value] <- max_value
-  df[,nums][df[,nums] < 0] <- 0
+  df[,nums][df[,nums] < min_value] <- min_value
 
   (df)
 }
 ```
-
-Function to generate a dataframe of N data instances and split it into train, validation and test sets according to the fractions given (`fractionTraining`, `fractionValidation`, and `fractionTest`):
 
 ```{r}
 library(MASS)
@@ -78,9 +86,9 @@ generate_data <- function(N, fractionTraining, fractionValidation, fractionTest)
   correlated_vars_df_cols <- c("prog1_grade", "prog2_grade", "prog_proj_grade")
   colnames(correlated_vars_df) <- correlated_vars_df_cols
   
-  correlated_vars_df <- round_df(correlated_vars_df, digits = 1, max_value = 10)
+  correlated_vars_df <- round_df(correlated_vars_df, digits = 1, max_value = 10, min_value = 0)
   
-  df <- cbind(absences, correlated_vars_df)
+  df <- cbind(id, absences, correlated_vars_df)
   
   sampleSizeTraining   <- floor(fractionTraining   * nrow(df))
   sampleSizeValidation <- floor(fractionValidation * nrow(df))
@@ -101,7 +109,7 @@ generate_data <- function(N, fractionTraining, fractionValidation, fractionTest)
 }
 ```
 
-We generate 3 different data frames: one as the `train` set, one as the `validation` set and one as the `test` set. 
+We generate 3 different dataframes: one as the `train` set, one as the `validation` set and one as the `test` set. 
 
 ```{r}
 data <- generate_data(3000, 0.8, 0.1, 0.1)
@@ -117,7 +125,7 @@ In order to define our **MLP** (*Multi Layer Perceptron*) model, we'll use the `
 
 ```{r}
 library(nnet)
-model <- nnet(prog_proj_grade/10 ~ ., data=train, size=5, decay=1.0e-5, maxit=2000)
+model <- nnet(prog_proj_grade/10 ~ absences + prog1_grade + prog2_grade, data=train, size=5, decay=1.0e-5, maxit=2000)
 model
 summary(model)
 ```
@@ -141,7 +149,7 @@ fit_rf=function(x)
   {
     s=32
   }
-  model=nnet(prog_proj_grade/10 ~ ., data=train, size=s)
+  model=nnet(prog_proj_grade/10 ~ absences + prog1_grade + prog2_grade, data=train, size=s)
   predictions=predict(model, test)
   rmse <- sqrt(mean((test$prog2_grade-predictions*10)^2))
   return(-rmse) #since GA maximize the objective function and we want to minimize RMSE
@@ -152,14 +160,14 @@ fit_rf=function(x)
 library(GA)
 library(tictoc)
 tic()
-GA3=ga(type='binary',fitness=fit_rf,nBits=14,
+GA=ga(type='binary',fitness=fit_rf,nBits=14,
        maxiter=30,popSize=50,seed=1234,keepBest=TRUE)
-summary(GA3)
-plot(GA3)
+summary(GA)
+plot(GA)
 toc()
 ```
 ```{r}
-ga_rf_fit=as.data.frame(GA3@bestSol)
+ga_rf_fit=as.data.frame(GA@bestSol)
 ga_size=apply(ga_rf_fit[, 1:5],1,binary2decimal)
 ga_size
 ```
