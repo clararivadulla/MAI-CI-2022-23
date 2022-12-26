@@ -136,20 +136,32 @@ rmse <- sqrt(mean((test$prog2_grade-test_pred)^2))
 rmse
 ```
 
-Let's use GA:
+Now, let's use GA to select the best hyperparameters of the Neural Network. We want to find the best value for the `size` of the `nnet` somewhere betweeen `1` and `2^5 = 32` and the best value for the `decay` parameter between `1.0e-1` and `1.0e-8`. To check how many bits we need, we multiply the maximum value of each hyperparameter and add it to the number of hyperparameters:
+
+`log2(32 * 8) + 2 = 10`
+
 ```{r}
 fit_rf=function(x)
 {
-  s=binary2decimal(x[1:1])
-  if(s==0)
+  size=binary2decimal(x[1:6]) # size from 1 to 2^5
+  decay=binary2decimal(x[7:10]) # decay from 1/10^1 to 1/10^8
+  if(size==0)
   {
-    s=1
+    size=1
   }
-  if(s>32)
+  if(decay==0)
   {
-    s=32
+    decay=1
   }
-  model=nnet(prog_proj_grade/10 ~ absences + prog1_grade + prog2_grade, data=train, size=s)
+  if(size>32)
+  {
+    size=32
+  }
+  if(decay>8)
+  {
+    decay=8
+  }
+  model=nnet(prog_proj_grade/10 ~ absences + prog1_grade + prog2_grade, data=train, size=size, decay=1.0/(10^decay))
   predictions=predict(model, test)
   rmse <- sqrt(mean((test$prog2_grade-predictions*10)^2))
   return(-rmse) #since GA maximize the objective function and we want to minimize RMSE
@@ -160,7 +172,7 @@ fit_rf=function(x)
 library(GA)
 library(tictoc)
 tic()
-GA=ga(type='binary',fitness=fit_rf,nBits=14,
+GA=ga(type='binary',fitness=fit_rf,nBits=10,
        maxiter=30,popSize=50,seed=1234,keepBest=TRUE)
 summary(GA)
 plot(GA)
@@ -168,8 +180,10 @@ toc()
 ```
 ```{r}
 ga_rf_fit=as.data.frame(GA@bestSol)
-ga_size=apply(ga_rf_fit[, 1:5],1,binary2decimal)
+ga_size=apply(ga_rf_fit[, 1:6], 1, binary2decimal)
 ga_size
+ga_decay=apply(ga_rf_fit[, 7:10], 1, binary2decimal)
+ga_decay
 ```
 
 ## Conclusions
