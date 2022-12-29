@@ -22,9 +22,8 @@ decoder <- function(x) {
   x <- gray2binary(x) # we use gray2binary to encode the binary such that each different value only changes in one bit
   lin <- binary2decimal(x[l0])
   siz <- 2**binary2decimal(x[l0 + 1:(l1 + l0)])
-  dec <- 10**(-binary2decimal(x[(l0 + l1 + 1):(l0 + l1 + l2)]))
+  dec <- 10**(-binary2decimal(x[(l0 + l1 + 1):(l0 + l1 + l2)]) - 1)
   out <- structure(c(lin, siz, dec), names = c("linear", "size", "decay"))
-  print(siz)
   return(out)
 }
 

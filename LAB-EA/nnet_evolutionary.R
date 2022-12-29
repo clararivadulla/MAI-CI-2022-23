@@ -55,7 +55,7 @@ fit_nnet_es <- function(x) {
     monitor = makeSimpleMonitor(),
     control = list(
       sigma = 1.5, # initial step size
-      lambda = 50, # number of offspring
+      lambda = 5, # number of offspring
       stop.ons = c(
         list(stopOnMaxIters(iters_weig)), # stop after x iterations
         getDefaultStoppingConditions() # or after default stopping conditions
@@ -84,9 +84,9 @@ train_es_nnet <- function() {
       monitor = makeSimpleMonitor(),
       control = list(
           sigma = 1.5, # initial step size
-          lambda = 50, # number of offspring
+          lambda = 10, # number of offspring
           stop.ons = c(
-              list(stopOnMaxIters(iters_test)), 
+              list(stopOnMaxIters(iters_arch)), 
               getDefaultStoppingConditions() 
           )
       )
@@ -98,7 +98,7 @@ train_es_nnet <- function() {
 
   results <- data.frame(
     'Type' = 'Evolutionary',
-    'Linear' = 0,
+    'Linear' = line_param,
     "Size" = round(res$best.param[1]),
     'Decay' = res$best.param[2],
     'Val Error' = res$best.fitness,

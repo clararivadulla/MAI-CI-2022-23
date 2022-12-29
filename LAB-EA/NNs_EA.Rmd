@@ -9,6 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+rm(list=ls())
 library(knitr)
 library(GA)
 library(tictoc)
@@ -16,7 +17,7 @@ library(nnet)
 library(MASS)
 library(cmaesr)
 
-seed = 42 # 1984
+seed = 32 # 1984
 
 opts_chunk$set(fig.align = "center", 
                out.width = "80%",
@@ -42,10 +43,10 @@ We generate 3 different dataframes: one as the `train` set, one as the `validati
 ```{r}
 source("generate_data.R")
 
-data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 0.5)
-#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 2.5)
-#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 0, noisy = 0.5)
-#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 0, noisy = 2.5)
+#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 1)
+#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 5)
+#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 0, noisy = 1)
+data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 0, noisy = 5)
 
 train <- data[[1]]
 val <- data[[2]]
@@ -79,11 +80,11 @@ GA <- train_ga_nnet()
 ```
 
 ```{r}
-gs_gs <- GA[[2]]
+ga_ga <- GA[[2]]
 GA <- GA[[1]]
 plot(GA)
 print(summary(GA))
-gs_gs
+ga_ga
 ```
 
 ## Evolution Strategies
@@ -101,6 +102,14 @@ es_es
 # Results
 
 ```{r}
-print(rbind(back_ga, gs_gs, es_es), row.names = FALSE)
+print(rbind(back_ga, ga_ga, es_es), row.names = FALSE)
 ```
 
+```{r}
+kable(rbind(back_ga, ga_ga, es_es), 'latex', booktabs = TRUE, row.names = FALSE)
+```
+
+
+```{r}
+kable(rbind(back_ga, ga_ga, es_es), 'latex', booktabs = TRUE, row.names = FALSE)
+```

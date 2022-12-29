@@ -2,9 +2,9 @@
 # We find the best architecture using genetic algorithms
 # We train the neural network with genetic algorithms
 
-iters_test <- 500
+iters_test <- 200
 iters_arch <- 50
-iters_weig <- 5
+iters_weig <- 30
 
 linear <- 0:1                     # use a linear out or not
 b0 <- decimal2binary(max(linear)) # max number of bits requires
@@ -22,7 +22,7 @@ decoder <- function(x) {
   x <- gray2binary(x) # we use gray2binary to encode the binary such that each different value only changes in one bit
   lin <- binary2decimal(x[l0])
   siz <- 2**binary2decimal(x[l0 + 1:(l1 + l0)])
-  dec <- 10**(-binary2decimal(x[(l0 + l1 + 1):(l0 + l1 + l2)]))
+  dec <- 10**(-binary2decimal(x[(l0 + l1 + 1):(l0 + l1 + l2)]) - 1)
   out <- structure(c(lin, siz, dec), names = c("linear", "size", "decay"))
   return(out)
 }

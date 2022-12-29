@@ -15,19 +15,21 @@ generate_data <- function(N, fractionTraining, fractionValidation, fractionTest,
   
   A <- matrix(runif(3^2)*2-1, ncol=3) 
   Sigma <- t(A) %*% A
-  print(Sigma)
   Sigma[1,] <- Sigma[1,] * c(noisy, hardness, hardness)
   Sigma[2,] <- Sigma[2,] * c(hardness, noisy, hardness)
   Sigma[3,] <- Sigma[3,] * c(hardness, hardness, noisy)
   print(Sigma)
   
   cor_var_means <- c(6.4, 6.7, 7.3)
-  print(cor_var_means)
   correlated_vars_df <- as.data.frame(mvrnorm(n = N, mu = cor_var_means, Sigma = Sigma))
   
   correlated_vars_df_cols <- c("prog1_grade", "prog2_grade", "prog_proj_grade")
   colnames(correlated_vars_df) <- correlated_vars_df_cols
   
+  
+  correlated_vars_df[, 3] <- correlated_vars_df[, 3] + rnorm(N, 0, noisy)
+
+
   correlated_vars_df <- round_df(correlated_vars_df, digits = 1, max_value = 10, min_value = 0)
   
   df <- cbind(id, absences, correlated_vars_df)
