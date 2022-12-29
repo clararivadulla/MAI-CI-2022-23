@@ -8,7 +8,7 @@ round_df <- function(df, digits, max_value, min_value) {
 
   (df)
 }
-generate_data <- function(N, fractionTraining, fractionValidation, fractionTest, hardness=0.1) { # hardness from 0 (h) to 1 (hard)
+generate_data <- function(N, fractionTraining, fractionValidation, fractionTest, hardness=0.1, noisy = 2) { # hardness from 0 (h) to 1 (hard)
   
   id <- paste0("S#", 1:N)
   absences <- rpois(N, lambda = 5)
@@ -16,12 +16,11 @@ generate_data <- function(N, fractionTraining, fractionValidation, fractionTest,
   A <- matrix(runif(3^2)*2-1, ncol=3) 
   Sigma <- t(A) %*% A
   print(Sigma)
-  Sigma[1,] <- Sigma[1,] - c(0, hardness, hardness)
-  Sigma[2,] <- Sigma[2,] - c(hardness, 0, hardness)
-  Sigma[3,] <- Sigma[3,] - c(hardness, hardness, 0)
+  Sigma[1,] <- Sigma[1,] * c(noisy, hardness, hardness)
+  Sigma[2,] <- Sigma[2,] * c(hardness, noisy, hardness)
+  Sigma[3,] <- Sigma[3,] * c(hardness, hardness, noisy)
   print(Sigma)
   
-  x <- runif(2, 0, 10)
   cor_var_means <- c(6.4, 6.7, 7.3)
   print(cor_var_means)
   correlated_vars_df <- as.data.frame(mvrnorm(n = N, mu = cor_var_means, Sigma = Sigma))

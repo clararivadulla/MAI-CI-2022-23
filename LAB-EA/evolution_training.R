@@ -2,9 +2,9 @@
 # We find the best architecture using Evolution Strategies algorithms
 # We train the neural network with Evolution Strategies
 
-iters_test <- 1
-iters_arch <- 2
-iters_weig <- 1
+iters_test <- 50
+iters_arch <- 30
+iters_weig <- 20
 
 fit_es <- function(x) {
     # x is a vector of weights used for the network

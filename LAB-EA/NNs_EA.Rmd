@@ -32,47 +32,24 @@ knit_hooks$set(par = function(before, options, envir)
 })
 ```
 
-# Introduction
-
-Evolutionary neural networks (ENNs) are an adaptive approach that combines the adaptive mechanism of Evolutionary algorithms (EAs) with the learning mechanism of Artificial Neural Network (ANNs). 
-One of the main issues in developing Deep Neural Networks is creation of the architecture. This architecture is not trivial to design and has a great effect on both performance of the model and the 
-required data needed to train it. Thus, methods that automate the search of the best architecture are intersting to study.
 
 ## Dataset
 
 As specified in the description of the exercise, we're going to use **synthetic data**. This will allow us to determine the sample size used for training, validation and testing, the true generalization error of a model, the amount of noise and the problem hardness.
-
-We've decided to create a data set related to the performance of students in the Bachelor Degree in Informatics Engineering of the UPC. Specifically, we want to predict the grade that they will obtain in the subject of Programming Projects according to their previous results in two related subjects: Programming 1 and Programming 2.
-
-First, we list down all variables we want to include in the data set, and describe the requirements of each one:
-
-
-| Variable | Variable name | Description |
-|-------|-------------|-------------|
-| Student ID | id | Unique identifier of a student. 
-| Programming 1 Grade* | prog1_grade | The grade that the student got in the Programming 1 subject. The average grade for all students is 6.4 out of 10.
-| Programming 2 Grade* | prog2_grade | The grade that the student got in the Programming 2 subject. The average grade for all students is 6.7 out of 10.
-| Class Absences | absences | The number of absences of a student (number of days they've not attended to class) during their first year. Students tend to have an average of 5 absences.
-| Programming Projects Grade* | prog_proj_grade | The mean grade of a student from Semester 1 to Semester 4. The average mean grade is 7.3 out of 10. 
-\* Variables that are correlated with one another
-
-Now, we're going to define the functions that are useful for generating our synthetic data set: `generate_data`, to generate a dataframe of N data instances and split it into train, validation and test sets according to the fractions given (`fractionTraining`, `fractionValidation`, and `fractionTest`); and `round_df`, to round the data by defining a `max_value` and a `min_value`. 
-
-In the generating process, we take into account that:
-* To generate unique `IDs` is to create a sequence of whole numbers.
-* The number of `absences` is distributed according to a Poisson distribution.
-* The 3 grades (`prog1_grade`, `prog2_grade`, `prog_proj_grade`) are correlated, and so we need a vector of means and a variance-covariance matrix to generate our multivariate normal distribution and calculate the covariances. 
-
 
 We generate 3 different dataframes: one as the `train` set, one as the `validation` set and one as the `test` set. 
 
 ```{r}
 source("generate_data.R")
 
-data <- generate_data(3000, 0.8, 0.1, 0.1, hardness=0.1)
+data <- generate_data(3000, 0.8, 0.1, 0.1, hardness=1, noisy = 1)
 train <- data[[1]]
 val <- data[[2]]
 test <- data[[3]]
+```
+
+```{r}
+train
 ```
 
 
@@ -82,24 +59,20 @@ In order to define our **MLP** (*Multi Layer Perceptron*) model, we'll use the `
 
 ## Genetic Algorithms For Finding the best architecture
 
-Evolutionary convolutional neural networks: An application to handwriting recognition
-
 ```{r}
 source("genetic_nn_search.R")
-GA <- train_nnet()
+Back <- train_nnet()
 ```
 
 ```{r}
-back_ga <- GA[[2]]
-GA <- GA[[1]]
-plot(GA)
-print(summary(GA))
-gs_gs
+back_ga <- Back[[2]]
+Back <- Back[[1]]
+plot(Back)
+print(summary(Back))
+back_ga
 ```
 
 ## Genetic Algorithms for training a neural network
-
-122 paper
 
 
 ```{r}
@@ -132,12 +105,4 @@ es_es
 ```{r}
 print(rbind(back_ga, gs_gs, es_es), row.names = FALSE)
 ```
-
-# Conclusions
-
-
-## References
-- https://towardsdatascience.com/how-to-create-a-custom-dataset-in-r-cf045e286656
-- https://towardsdatascience.com/genetic-algorithm-in-r-hyperparameter-tuning-5fc6439d2962
-
 

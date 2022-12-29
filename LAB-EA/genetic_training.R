@@ -2,19 +2,19 @@
 # We find the best architecture using genetic algorithms
 # We train the neural network with genetic algorithms
 
-iters_test <- 50
-iters_arch <- 2
-iters_weig <- 1
+iters_test <- 500
+iters_arch <- 50
+iters_weig <- 5
 
 linear <- 0:1                     # use a linear out or not
 b0 <- decimal2binary(max(linear)) # max number of bits requires
 l0 <- length(b0)                  # length of bits needed for encoding
 
-sizes <- 0:3 #4                      # range of values to search for the number of nodes in the hidden layer
+sizes <- 0:3                      # range of values to search for the number of nodes in the hidden layer
 b1 <- decimal2binary(max(sizes))  # max number of bits requires
 l1 <- length(b1)                  # length of bits needed for encoding
 
-decays  <- 0:3 # 4                    # range of values to search for the the decay
+decays  <- 0:3                    # range of values to search for the the decay
 b2 <- decimal2binary(max(decays)) # max number of bits requires
 l2 <- length(b2)                  # length of bits needed for encoding
 
