@@ -16,7 +16,7 @@ library(nnet)
 library(MASS)
 library(cmaesr)
 
-seed = 1984
+seed = 42 # 1984
 
 opts_chunk$set(fig.align = "center", 
                out.width = "80%",
@@ -42,16 +42,15 @@ We generate 3 different dataframes: one as the `train` set, one as the `validati
 ```{r}
 source("generate_data.R")
 
-data <- generate_data(3000, 0.8, 0.1, 0.1, hardness=1, noisy = 1)
+data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 0.5)
+#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 2.5)
+#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 0, noisy = 0.5)
+#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 0, noisy = 2.5)
+
 train <- data[[1]]
 val <- data[[2]]
 test <- data[[3]]
 ```
-
-```{r}
-train
-```
-
 
 # Model
 
@@ -60,7 +59,7 @@ In order to define our **MLP** (*Multi Layer Perceptron*) model, we'll use the `
 ## Genetic Algorithms For Finding the best architecture
 
 ```{r}
-source("genetic_nn_search.R")
+source("nnet_derivative.R")
 Back <- train_nnet()
 ```
 
@@ -74,9 +73,8 @@ back_ga
 
 ## Genetic Algorithms for training a neural network
 
-
 ```{r}
-source("genetic_training.R")
+source("nnet_genetic.R")
 GA <- train_ga_nnet()
 ```
 
@@ -91,7 +89,7 @@ gs_gs
 ## Evolution Strategies
 
 ```{r}
-source("evolution_training.R")
+source("nnet_evolutionary.R")
 es_es <- train_es_nnet()
 ```
 
