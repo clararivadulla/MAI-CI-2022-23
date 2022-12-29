@@ -10,6 +10,14 @@ output:
 
 ```{r setup, include=FALSE}
 library(knitr)
+library(GA)
+library(tictoc)
+library(nnet)
+library(MASS)
+library(cmaesr)
+
+seed = 1984
+
 opts_chunk$set(fig.align = "center", 
                out.width = "80%",
                fig.width = 6, fig.height = 5,
@@ -24,7 +32,11 @@ knit_hooks$set(par = function(before, options, envir)
 })
 ```
 
-## Introduction
+# Introduction
+
+Evolutionary neural networks (ENNs) are an adaptive approach that combines the adaptive mechanism of Evolutionary algorithms (EAs) with the learning mechanism of Artificial Neural Network (ANNs). 
+One of the main issues in developing Deep Neural Networks is creation of the architecture. This architecture is not trivial to design and has a great effect on both performance of the model and the 
+required data needed to train it. Thus, methods that automate the search of the best architecture are intersting to study.
 
 ## Dataset
 
@@ -49,69 +61,14 @@ Now, we're going to define the functions that are useful for generating our synt
 In the generating process, we take into account that:
 * To generate unique `IDs` is to create a sequence of whole numbers.
 * The number of `absences` is distributed according to a Poisson distribution.
-* The 3 grades (`prog1_grade`, `prog2_grade', `prog_proj_grade`) are correlated, and so we need a vector of means and a variance-covariance matrix to generate our multivariate normal distribution and calculate the covariances. 
+* The 3 grades (`prog1_grade`, `prog2_grade`, `prog_proj_grade`) are correlated, and so we need a vector of means and a variance-covariance matrix to generate our multivariate normal distribution and calculate the covariances. 
 
-
-```{r}
-round_df <- function(df, digits, max_value, min_value) {
-  nums <- vapply(df, is.numeric, FUN.VALUE = logical(1))
-
-  df[,nums] <- round(df[,nums], digits = digits)
-  df[,nums][df[,nums] > max_value] <- max_value
-  df[,nums][df[,nums] < min_value] <- min_value
-
-  (df)
-}
-```
-
-```{r}
-library(MASS)
-generate_data <- function(N, fractionTraining, fractionValidation, fractionTest) {
-  
-  id <- paste0("S#", 1:N)
-  set.seed(0717)
-  absences <- rpois(N, lambda = 5)
-  
-  cor_var_means <- c(6.4, 6.7, 7.3)
-  cor_var_matrix <- matrix(
-    c(
-      0.87, 0.65, 0.6,
-      0.65, 1.2, 0.7,
-      0.6, 0.7, 0.68
-    ), byrow = T, nrow = 3
-  )
-  set.seed(0717)
-  correlated_vars_df <- as.data.frame(mvrnorm(n = N, mu = cor_var_means, Sigma = cor_var_matrix))
-  
-  correlated_vars_df_cols <- c("prog1_grade", "prog2_grade", "prog_proj_grade")
-  colnames(correlated_vars_df) <- correlated_vars_df_cols
-  
-  correlated_vars_df <- round_df(correlated_vars_df, digits = 1, max_value = 10, min_value = 0)
-  
-  df <- cbind(id, absences, correlated_vars_df)
-  
-  sampleSizeTraining   <- floor(fractionTraining   * nrow(df))
-  sampleSizeValidation <- floor(fractionValidation * nrow(df))
-  sampleSizeTest       <- floor(fractionTest       * nrow(df))
-
-  indicesTraining    <- sort(sample(seq_len(nrow(df)), size=sampleSizeTraining))
-  indicesNotTraining <- setdiff(seq_len(nrow(df)), indicesTraining)
-  indicesValidation  <- sort(sample(indicesNotTraining, size=sampleSizeValidation))
-  indicesTest        <- setdiff(indicesNotTraining, indicesValidation)
-
-
-  dfTraining   <- df[indicesTraining, ]
-  dfValidation <- df[indicesValidation, ]
-  dfTest       <- df[indicesTest, ]
-  
-  return(list(dfTraining, dfValidation, dfTest))
-  
-}
-```
 
 We generate 3 different dataframes: one as the `train` set, one as the `validation` set and one as the `test` set. 
 
 ```{r}
+source("generate_data.R")
+
 data <- generate_data(3000, 0.8, 0.1, 0.1)
 train <- data[[1]]
 val <- data[[2]]
@@ -119,75 +76,64 @@ test <- data[[3]]
 ```
 
 
-## Model
+# Model
 
 In order to define our **MLP** (*Multi Layer Perceptron*) model, we'll use the `nnet` package, which is intended for fitting feed-forward neural networks with a single hidden layer. 
 
-```{r}
-library(nnet)
-model <- nnet(prog_proj_grade/10 ~ absences + prog1_grade + prog2_grade, data=train, size=5, decay=1.0e-5, maxit=2000)
-model
-summary(model)
-```
-```{r}
-test_pred <- predict(model, test)*10
-test_results <- data.frame(test_actual = test$prog2_grade, test_prediction = test_pred)
-rmse <- sqrt(mean((test$prog2_grade-test_pred)^2))
-rmse
-```
+## Genetic Algorithms For Finding the best architecture
 
-Now, let's use GA to select the best hyperparameters of the Neural Network. We want to find the best value for the `size` of the `nnet` somewhere betweeen `1` and `2^5 = 32` and the best value for the `decay` parameter between `1.0e-1` and `1.0e-8`. To check how many bits we need, we multiply the maximum value of each hyperparameter and add it to the number of hyperparameters:
-
-`log2(32 * 8) + 2 = 10`
+Evolutionary convolutional neural networks: An application to handwriting recognition
 
 ```{r}
-fit_rf=function(x)
-{
-  size=binary2decimal(x[1:6]) # size from 1 to 2^5
-  decay=binary2decimal(x[7:10]) # decay from 1/10^1 to 1/10^8
-  if(size==0)
-  {
-    size=1
-  }
-  if(decay==0)
-  {
-    decay=1
-  }
-  if(size>32)
-  {
-    size=32
-  }
-  if(decay>8)
-  {
-    decay=8
-  }
-  model=nnet(prog_proj_grade/10 ~ absences + prog1_grade + prog2_grade, data=train, size=size, decay=1.0/(10^decay))
-  predictions=predict(model, test)
-  rmse <- sqrt(mean((test$prog2_grade-predictions*10)^2))
-  return(-rmse) #since GA maximize the objective function and we want to minimize RMSE
-}
+source("genetic_nn_search.R")
+GA <- train_nnet()
 ```
 
 ```{r}
-library(GA)
-library(tictoc)
-tic()
-GA=ga(type='binary',fitness=fit_rf,nBits=10,
-       maxiter=30,popSize=50,seed=1234,keepBest=TRUE)
-summary(GA)
+back_ga <- GA[[2]]
+GA <- GA[[1]]
 plot(GA)
-toc()
+print(summary(GA))
+gs_gs
 ```
+
+## Genetic Algorithms for training a neural network
+
+122 paper
+
+
 ```{r}
-ga_rf_fit=as.data.frame(GA@bestSol)
-ga_size=apply(ga_rf_fit[, 1:6], 1, binary2decimal)
-ga_size
-ga_decay=apply(ga_rf_fit[, 7:10], 1, binary2decimal)
-ga_decay
+source("genetic_training.R")
+GA <- train_ga_nnet()
 ```
 
-## Conclusions
+```{r}
+gs_gs <- GA[[2]]
+GA <- GA[[1]]
+plot(GA)
+print(summary(GA))
+gs_gs
+```
 
+## Evolution Strategies
+
+```{r}
+source("evolution_training.R")
+es_es <- train_es_nnet()
+```
+
+```{r}
+es_es
+```
+
+
+# Results
+
+```{r}
+print(rbind(back_ga, gs_gs, es_es), row.names = FALSE)
+```
+
+# Conclusions
 
 
 ## References
