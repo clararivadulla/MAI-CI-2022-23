@@ -2,9 +2,9 @@
 # We find the best architecture using Evolution Strategies algorithms
 # We train the neural network with Evolution Strategies
 
-iters_test <- 50
-iters_arch <- 30
-iters_weig <- 20
+iters_test <- 100
+iters_arch <- 50
+iters_weig <- 100
 
 fit_es <- function(x) {
     # x is a vector of weights used for the network
@@ -55,7 +55,7 @@ fit_nnet_es <- function(x) {
     monitor = makeSimpleMonitor(),
     control = list(
       sigma = 1.5, # initial step size
-      lambda = 5, # number of offspring
+      lambda = 50, # number of offspring
       stop.ons = c(
         list(stopOnMaxIters(iters_weig)), # stop after x iterations
         getDefaultStoppingConditions() # or after default stopping conditions

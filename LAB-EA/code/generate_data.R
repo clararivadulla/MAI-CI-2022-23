@@ -26,8 +26,9 @@ generate_data <- function(N, fractionTraining, fractionValidation, fractionTest,
   correlated_vars_df_cols <- c("prog1_grade", "prog2_grade", "prog_proj_grade")
   colnames(correlated_vars_df) <- correlated_vars_df_cols
   
-  
-  correlated_vars_df[, 3] <- correlated_vars_df[, 3] + rnorm(N, 0, noisy)
+  if (hardness == 0) {
+    correlated_vars_df[, 3] <- correlated_vars_df[, 3] + rnorm(N, 0, noisy)
+  }
 
 
   correlated_vars_df <- round_df(correlated_vars_df, digits = 1, max_value = 10, min_value = 0)

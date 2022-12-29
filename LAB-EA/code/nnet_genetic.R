@@ -3,8 +3,8 @@
 # We train the neural network with genetic algorithms
 
 iters_test <- 200
-iters_arch <- 50
-iters_weig <- 30
+iters_arch <- 100
+iters_weig <- 50
 
 linear <- 0:1                     # use a linear out or not
 b0 <- decimal2binary(max(linear)) # max number of bits requires

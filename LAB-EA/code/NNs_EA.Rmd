@@ -43,10 +43,7 @@ We generate 3 different dataframes: one as the `train` set, one as the `validati
 ```{r}
 source("generate_data.R")
 
-#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 1)
-#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 5)
-#data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 0, noisy = 1)
-data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 0, noisy = 5)
+data <- generate_data(3000, 0.8, 0.1, 0.1, hardness = 1, noisy = 1)
 
 train <- data[[1]]
 val <- data[[2]]

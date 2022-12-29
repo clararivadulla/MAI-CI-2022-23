@@ -4,7 +4,7 @@
 
 iters_test <- 500
 iters_arch <- 50
-iters_weig <- 5
+iters_weig <- 100
 
 linear <- 0:1                     # use a linear out or not
 b0 <- decimal2binary(max(linear)) # max number of bits requires
