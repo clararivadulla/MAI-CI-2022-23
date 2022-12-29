@@ -8,22 +8,23 @@ round_df <- function(df, digits, max_value, min_value) {
 
   (df)
 }
-generate_data <- function(N, fractionTraining, fractionValidation, fractionTest) {
+generate_data <- function(N, fractionTraining, fractionValidation, fractionTest, hardness=0.1) { # hardness from 0 (h) to 1 (hard)
   
   id <- paste0("S#", 1:N)
-  set.seed(0717)
   absences <- rpois(N, lambda = 5)
   
+  A <- matrix(runif(3^2)*2-1, ncol=3) 
+  Sigma <- t(A) %*% A
+  print(Sigma)
+  Sigma[1,] <- Sigma[1,] - c(0, hardness, hardness)
+  Sigma[2,] <- Sigma[2,] - c(hardness, 0, hardness)
+  Sigma[3,] <- Sigma[3,] - c(hardness, hardness, 0)
+  print(Sigma)
+  
+  x <- runif(2, 0, 10)
   cor_var_means <- c(6.4, 6.7, 7.3)
-  cor_var_matrix <- matrix(
-    c(
-      0.87, 0.65, 0.6,
-      0.65, 1.2, 0.7,
-      0.6, 0.7, 0.68
-    ), byrow = T, nrow = 3
-  )
-  set.seed(0717)
-  correlated_vars_df <- as.data.frame(mvrnorm(n = N, mu = cor_var_means, Sigma = cor_var_matrix))
+  print(cor_var_means)
+  correlated_vars_df <- as.data.frame(mvrnorm(n = N, mu = cor_var_means, Sigma = Sigma))
   
   correlated_vars_df_cols <- c("prog1_grade", "prog2_grade", "prog_proj_grade")
   colnames(correlated_vars_df) <- correlated_vars_df_cols
@@ -40,7 +41,6 @@ generate_data <- function(N, fractionTraining, fractionValidation, fractionTest)
   indicesNotTraining <- setdiff(seq_len(nrow(df)), indicesTraining)
   indicesValidation  <- sort(sample(indicesNotTraining, size=sampleSizeValidation))
   indicesTest        <- setdiff(indicesNotTraining, indicesValidation)
-
 
   dfTraining   <- df[indicesTraining, ]
   dfValidation <- df[indicesValidation, ]
